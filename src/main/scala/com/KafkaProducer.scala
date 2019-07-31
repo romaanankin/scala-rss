@@ -16,7 +16,7 @@ object KafkaProducer {
     "org.apache.kafka.common.serialization.StringSerializer")
   props.put("acks", "all")
   val producer = new KafkaProducer[String, String](props)
-  val topic = "test2"
+  val topic = "test"
 
   def send(feed: Seq[AnyRef]) {
     Try {
