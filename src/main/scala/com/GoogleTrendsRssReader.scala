@@ -11,7 +11,6 @@ object GoogleTrendsRssReader extends App {
           .timeout(connTimeoutMs = 2000, readTimeoutMs = 5000)
           .asString
 
-
         val xmlString = response.body
 
         val xml = XML.loadString(xmlString)
@@ -34,7 +33,6 @@ object GoogleTrendsRssReader extends App {
 
         } yield Feed(url, trendName, headline, date)
 
-        headlines.foreach(i => println(i.date + "\n" + i.trendName + "\n" + i.headline + "\n" + i.url))
         KafkaProducer.send(headlines)
         //as a Google trends updates only once an hour
         Thread.sleep(5000)
