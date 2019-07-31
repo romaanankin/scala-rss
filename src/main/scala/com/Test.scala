@@ -15,14 +15,23 @@ object Test extends App {
 
     val items = xml \\ "item"
     case class Feed(url: String,source: String, title: String, date: String)
+//          val source = t \\ "item" \ "news_item" \ "news_item_source"
+//          val url = t \\ "item" \ "news_item" \ "news_item_url"
+//          val title = t \\ "item" \ "news_item" \ "news_item_title"
+//          val date = t \\ "item" \ "pubDate"
 
     def cnnFilter(node: Node): Boolean = (node \\ "news_item_source").text contains "CNN"
-    def itemExtractor(node: Node): NodeSeq = (node \\ "news_item").filter(i => cnnFilter(i))
+    def newsItemExtractor(node: Node): NodeSeq = (node \\ "news_item").filter(i => cnnFilter(i))
 
     val headlines = for {
-      t <- items
-      if cnnFilter(t)
-    } yield itemExtractor(t)
+        t <- items
+        if cnnFilter(t)
+        source = (newsItemExtractor(t) \ "news_item_source").text
+        url = (newsItemExtractor(t) \\ "news_item_url").text
+        title = (newsItemExtractor(t) \\"news_item_title").text
+        date = (t \\ "item" \ "pubDate").text
+
+    } yield Feed(url, source, title, date)
 
     headlines.foreach(println)
 }
