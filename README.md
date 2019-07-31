@@ -6,11 +6,11 @@
 
 Simple app contains off RSS reader and Kafka producer.
 Reads a Google RSS trend news from CNN and writes 
-it into Kafka broker. 
+it into Kafka broker which is both a persistence storage and a streaming service. 
 
 - requirements 
 
-Java 8, Scala 2.12, Sbt, Docker, Docker Compose
+Java 8, Scala 2.12, Sbt, Docker, Docker Compose, Apache Kafka 2.3.0(Optional)
 
 - steps to launch
 
