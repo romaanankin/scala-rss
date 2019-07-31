@@ -5,30 +5,38 @@ import scalaj.http.{Http, HttpResponse}
 import scala.xml.{Node, NodeSeq, XML}
 
 object GoogleTrendsRssReader extends App {
-    val response: HttpResponse[String] = Http("https://trends.google.com/trends/hottrends/atom/hourly")
-      .timeout(connTimeoutMs = 2000, readTimeoutMs = 5000)
-      .asString
 
-    val xmlString = response.body
+    while (true) {
+        val response: HttpResponse[String] = Http("https://trends.google.com/trends/hottrends/atom/hourly")
+          .timeout(connTimeoutMs = 2000, readTimeoutMs = 5000)
+          .asString
 
-    val xml = XML.loadString(xmlString)
 
-    val items = xml \\ "item"
+        val xmlString = response.body
 
-    case class Feed(url: String,trendName: String, headline: String, date: String)
+        val xml = XML.loadString(xmlString)
 
-    def cnnFilter(node: Node): Boolean = (node \\ "news_item_source").text contains "CNN"
-    def newsItemExtractor(node: Node): NodeSeq = (node \\ "news_item").filter(i => cnnFilter(i))
+        val items = xml \\ "item"
 
-    val headlines = for {
-        t <- items
-        if cnnFilter(t)
-        trendName = (t \\ "title").text
-        url = (newsItemExtractor(t) \\ "news_item_url").text
-        headline = (newsItemExtractor(t) \\"news_item_title").text.replaceAll("[^a-zA-Z0-9\\s+]", "")
-        date = (t \\ "item" \ "pubDate").text
+        case class Feed(url: String, trendName: String, headline: String, date: String)
 
-    } yield Feed(url, trendName, headline, date)
+        def cnnFilter(node: Node): Boolean = (node \\ "news_item_source").text contains "CNN"
 
-    headlines.foreach(i => println(i.date+"\n"+i.trendName+"\n"+i.headline+"\n"+i.url))
+        def newsItemExtractor(node: Node): NodeSeq = (node \\ "news_item").filter(i => cnnFilter(i))
+
+        val headlines = for {
+            t <- items
+            if cnnFilter(t)
+            trendName = (t \\ "title").text
+            url = (newsItemExtractor(t) \\ "news_item_url").text
+            headline = (newsItemExtractor(t) \\ "news_item_title").text.replaceAll("\\W", " ")
+            date = (t \\ "item" \ "pubDate").text
+
+        } yield Feed(url, trendName, headline, date)
+
+        headlines.foreach(i => println(i.date + "\n" + i.trendName + "\n" + i.headline + "\n" + i.url))
+        KafkaProducer.send(headlines)
+        //as a Google trends updates only once an hour
+        Thread.sleep(5000)
+    }
 }
