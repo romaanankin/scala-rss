@@ -1,9 +1,7 @@
 # Scala-rss-kafka
 
 
-Try this markdown:
-
-![alt text](myImage.jpg)
+![alt text](src/main/resources/myImage.jpg)
 
 
 Simple app contains off RSS reader and Kafka producer.
