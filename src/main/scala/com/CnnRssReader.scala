@@ -1,22 +1,25 @@
 package com
 
 import java.net.URL
-
+import com.GoogleTrendsRssReader.Feed
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.io.{SyndFeedInput, XmlReader}
 
 import scala.collection.JavaConverters._
 
 object CnnRssReader extends App {
-  val feedUrl = new URL("http://rss.cnn.com/rss/edition_us.rss")
-  val input = new SyndFeedInput
-  val feed: SyndFeed = input.build(new XmlReader(feedUrl))
 
-  val entries = asScalaBuffer(feed.getEntries).toVector
+  def read(url: String) = {
+    val input = new SyndFeedInput
+    val feed: SyndFeed = input.build(new XmlReader(new URL(url)))
+    val entries = asScalaBuffer(feed.getEntries).toVector
 
-  for (entry <- entries) {
-    println("Title: " + entry.getTitle)
-    println("URI:   " + entry.getUri)
-    println("Date:  " + entry.getPublishedDate)
+    for {
+      t <- entries
+      url = t.getUri
+      headline = t.getTitle
+      date = if (t.getPublishedDate != null) t.getPublishedDate.toString else "no data date in source"
+
+    } yield Feed(url, "", headline, date)
   }
 }

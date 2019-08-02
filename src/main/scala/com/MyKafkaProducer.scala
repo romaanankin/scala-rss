@@ -7,7 +7,6 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 import scala.util.Try
 
 object MyKafkaProducer {
-
   val props: Properties = new Properties()
   props.put("bootstrap.servers", "localhost:9092")
   props.put("key.serializer",
@@ -16,7 +15,6 @@ object MyKafkaProducer {
     "org.apache.kafka.common.serialization.StringSerializer")
   props.put("acks", "all")
   val producer = new KafkaProducer[String, String](props)
-//  val topic = "test"
 
   def sendToKafka(key: String, value: String, topic: String) {
     Try {

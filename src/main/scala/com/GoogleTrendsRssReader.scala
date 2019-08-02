@@ -6,6 +6,7 @@ import scala.collection.immutable
 import scala.xml.{Elem, Node, NodeSeq, XML}
 
 object GoogleTrendsRssReader {
+
   case class Feed(url: String, trendName: String, headline: String, date: String)
 
   def read(rssUrl: String): immutable.Seq[Feed] = {
