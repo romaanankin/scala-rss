@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
 import scala.util.Try
 
-object KafkaProducer {
+object MyKafkaProducer {
 
   val props: Properties = new Properties()
   props.put("bootstrap.servers", "localhost:9092")
@@ -16,12 +16,11 @@ object KafkaProducer {
     "org.apache.kafka.common.serialization.StringSerializer")
   props.put("acks", "all")
   val producer = new KafkaProducer[String, String](props)
-  val topic = "test"
+//  val topic = "test"
 
-  def send(feed: Seq[AnyRef]) {
+  def sendToKafka(key: String, value: String, topic: String) {
     Try {
-      for (i <- feed) {
-        val record = new ProducerRecord[String, String](topic, System.currentTimeMillis().toString, i.toString)
+        val record = new ProducerRecord[String, String](topic, key, value)
         val metadata = producer.send(record)
         printf(s"sent record(key=%s value=%s) " +
           "meta(partition=%d, offset=%d)\n",
@@ -30,5 +29,4 @@ object KafkaProducer {
           metadata.get().offset())
       }
     }
-  }
 }
