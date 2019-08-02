@@ -1,12 +1,12 @@
-package com
+package com.rss.readers
 
 import java.net.URL
 
-import com.GoogleTrendsRssReader.Feed
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.io.{SyndFeedInput, XmlReader}
+import com.rss.readers.GoogleTrendsRssReader.Feed
 
-import scala.collection.JavaConverters._
+import scala.collection.JavaConverters.asScalaBuffer
 import scala.collection.immutable
 
 object CnnRssReader {

@@ -1,4 +1,4 @@
-package com
+package com.rss.readers
 
 import scalaj.http.{Http, HttpResponse}
 
@@ -16,13 +16,13 @@ object GoogleTrendsRssReader {
     parseXML(xml)
   }
 
-  def getRssString(url: String): HttpResponse[String] = Http(url)
+  private def getRssString(url: String): HttpResponse[String] = Http(url)
     .timeout(connTimeoutMs = 2000, readTimeoutMs = 5000)
     .asString
 
-  def getXML(response: HttpResponse[String]): Elem = XML.loadString(response.body)
+  private def getXML(response: HttpResponse[String]): Elem = XML.loadString(response.body)
 
-  def parseXML(xml: Elem): immutable.Seq[Feed] = {
+  protected def parseXML(xml: Elem): immutable.Seq[Feed] = {
 
     def cnnFilter(node: Node): Boolean = (node \\ "news_item_source").text contains "CNN"
     def newsItemExtractor(node: Node): NodeSeq = (node \\ "news_item").filter(i => cnnFilter(i))

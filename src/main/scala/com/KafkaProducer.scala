@@ -2,17 +2,16 @@ package com
 
 import java.util.Properties
 
+import com.config.Config
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
 import scala.util.Try
 
-object MyKafkaProducer {
+object KafkaProducer {
   val props: Properties = new Properties()
-  props.put("bootstrap.servers", "localhost:9092")
-  props.put("key.serializer",
-    "org.apache.kafka.common.serialization.StringSerializer")
-  props.put("value.serializer",
-    "org.apache.kafka.common.serialization.StringSerializer")
+  props.put("bootstrap.servers", Config.bootstrap)
+  props.put("key.serializer", Config.serializer)
+  props.put("value.serializer", Config.serializer)
   props.put("acks", "all")
   val producer = new KafkaProducer[String, String](props)
 
