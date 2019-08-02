@@ -27,4 +27,4 @@ from terminal. Those which are currently in Google trends marked by string:
 
 `This one is in a google trend name`
 
-For testing purposes pooling interval is set to 30ces.
+For testing purposes pooling interval is set to 30sec.
