@@ -11,4 +11,5 @@ object Config {
   val bootstrap: String = ConfigFactory.load().getString("kafka.bootstrap.value")
   val appId: String = ConfigFactory.load().getString("kafka.app-id.value")
   val serializer: String = ConfigFactory.load().getString("kafka.serializer.value")
+  val pullInterval: Long = ConfigFactory.load().getLong("rss.pullInterval.value")
 }

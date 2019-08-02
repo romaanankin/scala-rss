@@ -32,6 +32,6 @@ object Launcher extends App {
   StreamProcessor.streams.start()
   while (true) {
     sendFeed(Config.topicGoogle, Config.topicCNN, Config.rssGoogle, Config.rssCNN)
-    Thread.sleep(10000)
+    Thread.sleep(Config.pullInterval)
   }
 }
