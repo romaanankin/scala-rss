@@ -18,13 +18,13 @@ object MyKafkaProducer {
 
   def sendToKafka(key: String, value: String, topic: String) {
     Try {
-        val record = new ProducerRecord[String, String](topic, key, value)
-        val metadata = producer.send(record)
-        printf(s"sent record(key=%s value=%s) " +
-          "meta(partition=%d, offset=%d)\n",
-          record.key(), record.value(),
-          metadata.get().partition(),
-          metadata.get().offset())
-      }
+      val record = new ProducerRecord[String, String](topic, key, value)
+      val metadata = producer.send(record)
+      printf(s"sent record(key=%s value=%s) " +
+        "meta(partition=%d, offset=%d)\n",
+        record.key(), record.value(),
+        metadata.get().partition(),
+        metadata.get().offset())
     }
+  }
 }

@@ -2,18 +2,31 @@ package com
 
 object FeedSender extends App {
   val urlGoogle = "https://trends.google.com/trends/hottrends/atom/hourly"
-  val cNNfeedUrl = "http://rss.cnn.com/rss/edition_us.rss"
+  val cnNfeedUrl = "http://rss.cnn.com/rss/edition_us.rss"
 
   val kafkaTopic = "testRefactored"
 
-  def sendFeed(poolingInterval: Long): Unit ={
+  def sendFeed(kafkaTopic: String, urlGoogle: String, urlCNN: String): Unit = {
     while (true) {
-      val google = GoogleTrendsRssReader.read(urlGoogle)
-      for (h <- google) {
-              MyKafkaProducer.sendToKafka(h.trendName, h.toString, kafkaTopic)
-            }
-      Thread.sleep(poolingInterval)
+      sendCNNRss(urlCNN, kafkaTopic)
+      sendGoogleRss(urlGoogle, kafkaTopic)
     }
   }
-  sendFeed(5000)
+
+  def sendCNNRss(url: String, kafkaTopic: String): Unit ={
+    val CNN = CnnRssReader.read(url)
+    for (c <- CNN) {
+      MyKafkaProducer.sendToKafka(c.url,c.toString,kafkaTopic)
+    }
+  }
+
+  def sendGoogleRss(url: String, kafkaTopic: String): Unit ={
+    val google = GoogleTrendsRssReader.read(urlGoogle)
+
+    for (g <- google) {
+      MyKafkaProducer.sendToKafka(g.trendName, g.toString, kafkaTopic)
+    }
+  }
+
+  sendFeed("neTopic",urlGoogle,cnNfeedUrl)
 }
