@@ -13,6 +13,8 @@ libraryDependencies ++= Seq(
   "com.rometools" % "rome" % "1.8.1",
   "com.typesafe" % "config" % "1.2.1",
   "org.apache.kafka" %% "kafka-streams-scala" % "2.2.0",
+  "ch.qos.logback" % "logback-classic" % "1.1.3",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.1.0",
   "org.scalatest" %% "scalatest" % "3.0.8"
 )
 scalacOptions += "-deprecation"
