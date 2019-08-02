@@ -7,7 +7,8 @@ import scala.xml.{Elem, Node, NodeSeq, XML}
 
 object GoogleTrendsRssReader {
 
-  case class Feed(url: String, trendName: String, headline: String, date: String)
+  case class Feed(source: String, url: String, trendName: String, headline: String, date: String)
+  val source = "Google"
 
   def read(rssUrl: String): immutable.Seq[Feed] = {
     val googleResponse: HttpResponse[String] = getRssString(rssUrl)
@@ -32,10 +33,9 @@ object GoogleTrendsRssReader {
       if cnnFilter(t)
       trendName = (t \\ "title").text
       url = (newsItemExtractor(t) \\ "news_item_url").text
-      //consider usee /w
       headline = (newsItemExtractor(t) \\ "news_item_title").text.replaceAll("\\W", " ")
       date = (t \\ "item" \ "pubDate").text
 
-    } yield Feed(url, trendName, headline, date)
+    } yield Feed(source, url, trendName, headline, date)
   }
 }

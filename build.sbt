@@ -12,6 +12,7 @@ libraryDependencies ++= Seq(
   "org.apache.kafka" % "kafka-clients" % "2.3.0",
   "com.rometools" % "rome" % "1.8.1",
   "com.typesafe" % "config" % "1.2.1",
+  "org.apache.kafka" %% "kafka-streams-scala" % "2.2.0",
   "org.scalatest" %% "scalatest" % "3.0.8"
 )
 scalacOptions += "-deprecation"
