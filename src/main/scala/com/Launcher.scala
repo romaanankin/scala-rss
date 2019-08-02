@@ -12,7 +12,6 @@ object Launcher extends App {
       for (c <- rssCNN) {
         sendCNNRss(c, kTopicCNN)
       }
-      println("\nA batch of data from Google trends RSS and CNN RSS has been sent successfully to Kafka topics!\n")
   }
 
   def sendCNNRss(url: String, kafkaTopic: String): Unit ={
@@ -32,6 +31,7 @@ object Launcher extends App {
   StreamProcessor.streams.start()
   while (true) {
     sendFeed(Config.topicGoogle, Config.topicCNN, Config.rssGoogle, Config.rssCNN)
+    println("\nA batch of data from Google trends RSS and CNN RSS has been sent successfully to Kafka topics!\n")
     Thread.sleep(Config.pullInterval)
   }
 }
