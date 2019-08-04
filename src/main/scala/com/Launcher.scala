@@ -5,6 +5,8 @@ import com.rss.readers.{CnnRssReader, GoogleTrendsRssReader}
 
 object Launcher extends App {
 
+  val unifiedKey = "Unified key"
+
   def sendFeed(kTopicGoogle: String,kTopicCNN: String, rssGoogle: List[String], rssCNN: List[String]): Unit = {
       for (g <- rssGoogle) {
         sendGoogleRss(g, kTopicGoogle)
@@ -17,14 +19,14 @@ object Launcher extends App {
   def sendCNNRss(url: String, kafkaTopic: String): Unit ={
     val CNN = CnnRssReader.read(url)
     for (c <- CNN) {
-      KafkaProducer.sendToKafka(c.url,c.toString,kafkaTopic)
+      KafkaProducer.sendToKafka(unifiedKey,c.toString,kafkaTopic)
     }
   }
 
   def sendGoogleRss(url: String, kafkaTopic: String): Unit ={
     val google = GoogleTrendsRssReader.read(url)
     for (g <- google) {
-      KafkaProducer.sendToKafka(g.url, g.toString, kafkaTopic)
+      KafkaProducer.sendToKafka(unifiedKey, g.trendName, kafkaTopic)
     }
   }
 
