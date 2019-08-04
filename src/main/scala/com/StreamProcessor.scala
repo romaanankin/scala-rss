@@ -35,9 +35,10 @@ object StreamProcessor {
     if (cnn != null) {
       val v1 = cnn.toLowerCase
       val v2 = google.toLowerCase().replaceAll("\\W", " ")
-      cnn != null && v1.containsSlice(v2)
+      v2.split(" ").exists(f => v1.split(" ").contains(f))
     } else false
   }
+
   protected def joinCondition(google: String, cnn: String): String = {
     if (boolCond(google,cnn)) {
       val s = s"\n$marker $google  $cnn\n"

@@ -21,7 +21,7 @@ object CnnRssReader {
       t <- entries
       url = t.getUri
       headline = t.getTitle
-      date = if (t.getPublishedDate != null) t.getPublishedDate.toString else "no data date in source"
+      date = if (t.getPublishedDate != null) t.getPublishedDate.toString else "no data presenting date in source"
 
     } yield Feed(source, url, "", headline, date)
   }
