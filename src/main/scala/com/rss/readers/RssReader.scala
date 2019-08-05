@@ -4,13 +4,12 @@ import java.net.URL
 
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.io.{SyndFeedInput, XmlReader}
-import com.rss.readers.GoogleTrendsRssReader.Feed
 
 import scala.collection.JavaConverters.asScalaBuffer
 import scala.collection.immutable
 
-object CnnRssReader {
-  val source = "CNN"
+object RssReader {
+  case class Feed(url: String, headline: String, date: String)
 
   def read(url: String): immutable.Seq[Feed] = {
     val input = new SyndFeedInput
@@ -23,6 +22,6 @@ object CnnRssReader {
       headline = t.getTitle
       date = if (t.getPublishedDate != null) t.getPublishedDate.toString else "no data presenting date in source"
 
-    } yield Feed(source, url, "", headline, date)
+    } yield Feed(url, headline, date)
   }
 }

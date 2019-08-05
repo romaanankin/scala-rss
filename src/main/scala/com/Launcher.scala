@@ -1,34 +1,36 @@
 package com
 
 import com.config.Config
-import com.rss.readers.{CnnRssReader, GoogleTrendsRssReader}
+import com.rss.readers.RssReader
 
 object Launcher extends App {
 
   val unifiedKey = "Unified key"
+  import com.StreamProcessor.MyJsonProtocol._
+  import spray.json._
 
   def sendFeed(kTopicGoogle: String,kTopicCNN: String, rssGoogle: List[String], rssCNN: List[String]): Unit = {
       for (g <- rssGoogle) {
-        sendGoogleRss(g, kTopicGoogle)
+        sendRss(g, kTopicGoogle)
       }
       for (c <- rssCNN) {
-        sendCNNRss(c, kTopicCNN)
+        sendRss(c, kTopicCNN)
       }
   }
 
-  def sendCNNRss(url: String, kafkaTopic: String): Unit ={
-    val CNN = CnnRssReader.read(url)
+  def sendRss(url: String, kafkaTopic: String): Unit ={
+    val CNN = RssReader.read(url)
     for (c <- CNN) {
-      KafkaProducer.sendToKafka(unifiedKey,c.toString,kafkaTopic)
+      KafkaProducer.sendToKafka(unifiedKey,c.toJson.toString(),kafkaTopic)
     }
   }
 
-  def sendGoogleRss(url: String, kafkaTopic: String): Unit ={
-    val google = GoogleTrendsRssReader.read(url)
-    for (g <- google) {
-      KafkaProducer.sendToKafka(unifiedKey, g.trendName, kafkaTopic)
-    }
-  }
+//  def sendGoogleRss(url: String, kafkaTopic: String): Unit = {
+//    val google = RssReader.read(url)
+//    for (g <- google) {
+//      KafkaProducer.sendToKafka(unifiedKey, g.toJson.toString(), kafkaTopic)
+//    }
+//  }
 
   StreamProcessor.streams.start()
   while (true) {
