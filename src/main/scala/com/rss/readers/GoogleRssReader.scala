@@ -1,6 +1,6 @@
 package com.rss.readers
 
-import com.rss.readers.RssReader.Feed
+import com.rss.readers.CnnRssReader.Feed
 import scalaj.http.{Http, HttpResponse}
 
 import scala.collection.immutable
@@ -31,9 +31,9 @@ object GoogleRssReader {
       if cnnFilter(t)
       trendName = (t \\ "title").text
       url = (newsItemExtractor(t) \\ "news_item_url").text
-//      headline = (newsItemExtractor(t) \\ "news_item_title").text.replaceAll("\\W", " ")
+      headline = (newsItemExtractor(t) \\ "news_item_title").text.replaceAll("\\W", " ")
       date = (t \\ "item" \ "pubDate").text
 
-    } yield Feed(url, trendName, date)
+    } yield Feed(trendName,url, headline, date)
   }
 }

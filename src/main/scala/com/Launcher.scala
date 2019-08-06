@@ -1,13 +1,11 @@
 package com
 
 import com.config.Config
-import com.rss.readers.{GoogleRssReader, RssReader}
+import com.rss.readers.{GoogleRssReader, CnnRssReader}
 
 object Launcher extends App {
 
-  val unifiedKey = "Unified key"
-  import com.StreamProcessor.MyJsonProtocol._
-  import spray.json._
+  val unifiedKey = "UnifiedKey"
 
   def sendFeed(kTopicGoogle: String,kTopicCNN: String, rssGoogle: List[String], rssCNN: List[String]): Unit = {
       for (g <- rssGoogle) {
@@ -19,16 +17,16 @@ object Launcher extends App {
   }
 
   def sendRss(url: String, kafkaTopic: String): Unit ={
-    val CNN = RssReader.read(url)
+    val CNN = CnnRssReader.read(url)
     for (c <- CNN) {
-      KafkaProducer.sendToKafka(unifiedKey,c.toJson.toString(),kafkaTopic)
+      KafkaProducer.sendToKafka(unifiedKey,c,kafkaTopic)
     }
   }
 
   def sendGoogleRss(url: String, kafkaTopic: String): Unit = {
     val google = GoogleRssReader.read(url)
     for (g <- google) {
-      KafkaProducer.sendToKafka(unifiedKey, g.toJson.toString(), kafkaTopic)
+      KafkaProducer.sendToKafka(unifiedKey, g, kafkaTopic)
     }
   }
 

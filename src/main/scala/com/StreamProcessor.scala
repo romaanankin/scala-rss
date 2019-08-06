@@ -4,24 +4,18 @@ import java.util.Properties
 import java.util.concurrent.TimeUnit
 
 import com.config.Config
-import com.rss.readers.RssReader.Feed
+import com.rss.readers.CnnRssReader.Feed
 import org.apache.kafka.streams.kstream.JoinWindows
 import org.apache.kafka.streams.scala.ImplicitConversions._
 import org.apache.kafka.streams.scala._
 import org.apache.kafka.streams.scala.kstream._
 import org.apache.kafka.streams.{KafkaStreams, StreamsConfig}
-import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 object StreamProcessor {
-
-  object MyJsonProtocol extends DefaultJsonProtocol {
-    implicit val feedFormat: RootJsonFormat[Feed] = jsonFormat3(Feed)
-  }
-
-  import MyJsonProtocol._
+  import KafkaProducer._
   import Serdes._
-  import spray.json._
-  val marker = "This one is in a google trend name:"
+
+  val marker = "noTrendMatch"
   val props: Properties = {
     val p = new Properties()
     p.put(StreamsConfig.APPLICATION_ID_CONFIG, Config.appId)
@@ -30,30 +24,30 @@ object StreamProcessor {
   }
 
   val builder: StreamsBuilder = new StreamsBuilder
-  val google: KStream[String, String] = builder.stream[String, String](Config.topicGoogle)
-  val cnn: KStream[String, String] = builder.stream[String, String](Config.topicCNN)
+  val google: KStream[String, Feed] = builder.stream[String, Feed](Config.topicGoogle)
+  val cnn: KStream[String, Feed] = builder.stream[String, Feed](Config.topicCNN)
 
   google
     .leftJoin(cnn)(joinCondition,JoinWindows.of(TimeUnit.MINUTES.toSeconds(100)))
-    .filter((_,v) => v.contains(marker))
+    .filterNot((_,v) => v.trendName.contains(marker))
+    .groupBy((_,v) => v.url)
+    .reduce((_,v2) => v2)
+    .toStream
     .peek((_, v) => println(v))
 
   val streams: KafkaStreams = new KafkaStreams(builder.build(), props)
 
-  protected def boolCond(google: String, cnn: String): Boolean = {
-    if (cnn != null && google != null) {
-      val v1 = JsonParser(google).convertTo[Feed]
-      val v2 = JsonParser(cnn).convertTo[Feed]
-      v2.headline.toLowerCase.split(" ").exists(f => v1.headline.toString.toLowerCase.split(" ").contains(f)) ||
-      v2.url == v1.url
+  protected def boolCond(google: Feed, cnn: Feed): Boolean = {
+    if(cnn != null && google != null) {
+      cnn.headline.toLowerCase.split(" ").exists(f => google.trendName.toString.toLowerCase.split(" ").contains(f)) ||
+        cnn.url == google.url
     } else false
   }
 
-  protected def joinCondition(google: String, cnn: String): String = {
+  protected def joinCondition(google: Feed, cnn: Feed): Feed = {
     if (boolCond(google,cnn)) {
-      val v = JsonParser(google).convertTo[Feed].headline
-      val s = s"\n$marker $v  $cnn\n"
-      s
-    } else ""
+      Feed(google.trendName,cnn.url,cnn.headline,cnn.date)
+    } else
+      Feed("noTrendMatch",google.url,google.headline,google.date)
   }
 }

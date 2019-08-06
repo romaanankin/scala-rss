@@ -13,8 +13,6 @@ libraryDependencies ++= Seq(
   "com.rometools" % "rome" % "1.8.1",
   "com.typesafe" % "config" % "1.2.1",
   "org.apache.kafka" %% "kafka-streams-scala" % "2.2.0",
-  "io.spray" %% "spray-json" % "1.3.4",
-  "com.google.code.gson" % "gson" % "2.8.5",
   "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.8",
   "org.scalatest" %% "scalatest" % "3.0.8"
 )

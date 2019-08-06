@@ -20,7 +20,7 @@ object Json {
   mapper.registerModule(DefaultScalaModule)
   mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
 
-  private def typeReference[T: Manifest] = new TypeReference[T] {
+  private def typeReference[T: Manifest]: TypeReference[T] = new TypeReference[T] {
     override def getType: Type = typeFromManifest(manifest[T])
   }
 
