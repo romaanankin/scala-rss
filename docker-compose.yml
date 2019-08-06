@@ -27,6 +27,20 @@ services:
     depends_on:
       - zoo1
 
+
+  schemaregistry1:
+    image: confluentinc/cp-schema-registry:5.2.1
+    restart: always
+    depends_on:
+      - zoo1
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry
+      SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
+    ports:
+      - 8081:8081
+
+
   rss_scala:
     image: rss-scala
     hostname: rss

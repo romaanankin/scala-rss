@@ -6,12 +6,12 @@ import com.config.Config
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerRecord}
 
 import scala.util.Try
-
 object KafkaProducer {
+
   val props: Properties = new Properties()
   props.put("bootstrap.servers", Config.bootstrap)
-  props.put("key.serializer", Config.serializer)
-  props.put("value.serializer", Config.serializer)
+//  props.put("key.serializer", Config.serializer)
+//  props.put("value.serializer", Config.serializer)
   props.put("acks", "all")
   val producer = new KafkaProducer[String, String](props)
 
