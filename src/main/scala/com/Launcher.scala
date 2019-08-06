@@ -1,7 +1,7 @@
 package com
 
 import com.config.Config
-import com.rss.readers.RssReader
+import com.rss.readers.{GoogleRssReader, RssReader}
 
 object Launcher extends App {
 
@@ -11,7 +11,7 @@ object Launcher extends App {
 
   def sendFeed(kTopicGoogle: String,kTopicCNN: String, rssGoogle: List[String], rssCNN: List[String]): Unit = {
       for (g <- rssGoogle) {
-        sendRss(g, kTopicGoogle)
+        sendGoogleRss(g, kTopicGoogle)
       }
       for (c <- rssCNN) {
         sendRss(c, kTopicCNN)
@@ -25,12 +25,12 @@ object Launcher extends App {
     }
   }
 
-//  def sendGoogleRss(url: String, kafkaTopic: String): Unit = {
-//    val google = RssReader.read(url)
-//    for (g <- google) {
-//      KafkaProducer.sendToKafka(unifiedKey, g.toJson.toString(), kafkaTopic)
-//    }
-//  }
+  def sendGoogleRss(url: String, kafkaTopic: String): Unit = {
+    val google = GoogleRssReader.read(url)
+    for (g <- google) {
+      KafkaProducer.sendToKafka(unifiedKey, g.toJson.toString(), kafkaTopic)
+    }
+  }
 
   StreamProcessor.streams.start()
   while (true) {

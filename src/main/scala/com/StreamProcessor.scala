@@ -44,7 +44,8 @@ object StreamProcessor {
     if (cnn != null && google != null) {
       val v1 = JsonParser(google).convertTo[Feed]
       val v2 = JsonParser(cnn).convertTo[Feed]
-      v2.headline.toLowerCase.contains(v1.headline.toLowerCase())
+      v2.headline.toLowerCase.split(" ").exists(f => v1.headline.toString.toLowerCase.split(" ").contains(f)) ||
+      v2.url == v1.url
     } else false
   }
 

@@ -22,6 +22,6 @@ object RssReader {
       headline = t.getTitle
       date = if (t.getPublishedDate != null) t.getPublishedDate.toString else "no data presenting date in source"
 
-    } yield Feed(url, headline, date)
+    } yield Feed(url.toString, headline, date)
   }
 }
