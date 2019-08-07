@@ -2,8 +2,6 @@ package com
 
 import java.util.Properties
 
-import com.config.Config
-import com.rss.readers.CnnRssReader.Feed
 import org.apache.kafka.clients.producer.{KafkaProducer, ProducerConfig, ProducerRecord}
 
 import scala.util.Try

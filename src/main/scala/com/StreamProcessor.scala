@@ -3,8 +3,8 @@ package com
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
-import com.config.Config
-import com.rss.readers.CnnRssReader.Feed
+import org.apache.kafka.streams.errors.ProductionExceptionHandler
+import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse
 import org.apache.kafka.streams.kstream.JoinWindows
 import org.apache.kafka.streams.scala.ImplicitConversions._
 import org.apache.kafka.streams.scala._
@@ -20,6 +20,7 @@ object StreamProcessor {
     val p = new Properties()
     p.put(StreamsConfig.APPLICATION_ID_CONFIG, Config.appId)
     p.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Config.bootstrap)
+    p.put(StreamsConfig.DEFAULT_PRODUCTION_EXCEPTION_HANDLER_CLASS_CONFIG, classOf[KafkaExceptionHandler])
     p
   }
 

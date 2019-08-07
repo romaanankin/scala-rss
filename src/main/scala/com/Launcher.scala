@@ -1,6 +1,5 @@
 package com
 
-import com.config.Config
 import com.rss.readers.{GoogleRssReader, CnnRssReader}
 
 object Launcher extends App {

@@ -1,6 +1,6 @@
 package com.rss.readers
 
-import com.rss.readers.CnnRssReader.Feed
+import com.Feed
 import scalaj.http.{Http, HttpResponse}
 
 import scala.collection.immutable
