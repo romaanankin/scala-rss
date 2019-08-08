@@ -2,14 +2,14 @@ package com.rss.readers
 
 import java.net.URL
 
-import com.{Config, Feed}
+import com.Feed
 import com.rometools.rome.feed.synd.SyndFeed
 import com.rometools.rome.io.{SyndFeedInput, XmlReader}
 
 import scala.collection.JavaConverters.asScalaBuffer
 import scala.collection.immutable
 
-object CnnRssReader extends App {
+object CnnRssReader {
 
   def read(url: String): immutable.Seq[Feed] = {
     val input = new SyndFeedInput
@@ -24,6 +24,4 @@ object CnnRssReader extends App {
 
     } yield Feed("",url.toString, headline, date)
   }
-   for (r <- Config.rssCNN)
-  println(read(r))
 }
