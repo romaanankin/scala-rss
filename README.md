@@ -18,8 +18,6 @@ Java 8, Scala 2.12, Sbt, Docker, Docker Compose
 
 `sbt assembly` 
 
-`docker build -t rss-scala . `
-
 `docker-compose -f docker-compose.yml up`
 
 After launching you can read a reliable news from CNN
