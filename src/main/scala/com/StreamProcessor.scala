@@ -2,10 +2,7 @@ package com
 
 import java.time.Duration
 import java.util.Properties
-import java.util.concurrent.TimeUnit
 
-import org.apache.kafka.streams.errors.ProductionExceptionHandler
-import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse
 import org.apache.kafka.streams.kstream.JoinWindows
 import org.apache.kafka.streams.scala.ImplicitConversions._
 import org.apache.kafka.streams.scala._
