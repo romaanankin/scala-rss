@@ -21,8 +21,6 @@ Java 8, Scala 2.12, Sbt, Docker, Docker Compose
 `docker-compose -f docker-compose.yml up`
 
 After launching you can read a reliable news from CNN
-from terminal. Those which are currently in Google trends marked by string:
-
-`This one is in a google trend name`
+from terminal. 
 
 For testing purposes pooling interval is set to 30sec.
