@@ -28,6 +28,7 @@ services:
       - zoo1
 
   rss_scala:
+    build: .
     image: rss-scala
     hostname: rss
     depends_on:

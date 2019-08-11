@@ -1,5 +1,6 @@
 package com
 
+import java.time.Duration
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
@@ -29,7 +30,7 @@ object StreamProcessor {
   val cnn: KStream[String, Feed] = builder.stream[String, Feed](Config.topicCNN)
 
   google
-    .leftJoin(cnn)(joinCondition,JoinWindows.of(TimeUnit.MINUTES.toSeconds(100)))
+    .leftJoin(cnn)(joinCondition,JoinWindows.of(Duration.ofSeconds(100)))
     .filterNot((_,v) => v.trendName.contains(marker))
     .groupBy((_,v) => v.url)
     .reduce((_,v2) => v2)
